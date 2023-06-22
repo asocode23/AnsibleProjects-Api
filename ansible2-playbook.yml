@@ -1,0 +1,63 @@
+# PLAY1
+- name: Installing Apache on the Amazon Linux nodes.
+  hosts: amazonlinuxservers
+
+  tasks:
+    - name: Updating all Apache packages on the Server
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+    - name: Installing the latest version of Apache on the Server
+      ansible.builtin.yum:
+        name: httpd
+        state: latest
+    - name: Starting Apache 
+      ansible.builtin.service:
+        name: httpd
+        state: started
+    - name: Enabling Apache on boot up run
+      ansible.builtin.service:
+        name: httpd
+        enabled: yes
+    - name: Copy index.html file from the controller to the nodes
+      ansible.builtin.copy:
+        src: /root/index.html
+        dest: /var/www/html/
+
+# PLAY2
+- name: Installing Apache on the Ubuntu nodes.
+  hosts: ubuntuservers
+
+  tasks:
+    - name: Updating all Apache packages on the Server
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+    - name: Installing the latest version of Apache on the Server
+      ansible.builtin.apt:
+        name: apache2
+        state: latest
+    - name: Starting Apache 
+      ansible.builtin.service:
+        name: apache2
+        state: started
+    - name: Enabling Apache on boot up run
+      ansible.builtin.service:
+        name: apache2
+        enabled: yes
+    - name: Copy index.html file from the controller to the nodes
+      ansible.builtin.copy:
+        src: /root/index.html
+        dest: /var/www/html/
+
+# PLAY3
+- name: Installing GIT on all nodes.
+  hosts: all
+
+  tasks:
+    - name: Installing GIT on all nodes in the inventory file
+      ansible.builtin.yum:
+        name: git
+        state: present
+
+

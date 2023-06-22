@@ -1,0 +1,46 @@
+# PLAY0
+- name: Ping all nodes.
+  hosts: all
+
+  tasks:
+    - name: Ping all the nodes to check if correctly set up
+      ansible.builtin.ping:
+
+# PLAY1
+- name: Installing Apache on the Amazon Linux nodes.
+  hosts: amazonlinuxservers
+
+  tasks:
+    - name: Updating all Apache packages on the Server
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+    - name: Installing the latest version of Apache on the Server
+      ansible.builtin.yum:
+        name: httpd
+        state: latest
+    - name: Starting Apache 
+      ansible.builtin.service:
+        name: httpd
+        state: started
+    - name: Enabling Apache on boot up run
+      ansible.builtin.service:
+        name: httpd
+        enabled: yes
+    - name: Copy index.html file from the controller to the nodes
+      ansible.builtin.copy:
+        src: /root/index.html
+        dest: /var/www/html/
+
+# PLAY2
+- name: Installing GIT on ubuntu servers.
+  hosts: ubuntuservers
+
+  tasks:
+    - name: Installing GIT on all nodes in the inventory file
+      ansible.builtin.yum:
+        name: git
+        state: present
+
+
+
